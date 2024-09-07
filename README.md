@@ -64,3 +64,4 @@ The files below perform the following:
 - read clean data from `derived_data/` folder
 - create stillbirth by gestational age plots using the conventional aproach 
 - save plots in `figures/` folder
+# fetus-at-risk
