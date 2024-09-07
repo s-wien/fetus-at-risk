@@ -16,7 +16,7 @@ You will need to supply your own data to use this code. If using vital records, 
 | Outcome                            | Stillbirth or livebirth                                           |
 | Stratifcation variable (opotional) | Variable to strafiy on (e.g., social or clinical characteristics) |
 
-# File Structure
+# File structure
 
 This repository contains the following file structure: 
 
@@ -32,7 +32,7 @@ This repository contains the following file structure:
 
 -`README` (you are reading this now)
 
-# Code Description
+# Code description
 
 The files below perform the following: 
 
@@ -64,4 +64,3 @@ The files below perform the following:
 - read clean data from `derived_data/` folder
 - create stillbirth by gestational age plots using the conventional aproach 
 - save plots in `figures/` folder
-# fetus-at-risk
