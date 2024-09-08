@@ -1,6 +1,6 @@
 # About this repository
 
-This repository includes all code used to estimate stillbirth by gestational age using the fetus-at-risk approach vs. the conventional estimate for stillbirth. If this is your first time using the fetus-at-risk method, please read [*The fetuses-at-risk approach: survival analysis from a fetal perspective*](https://pubmed.ncbi.nlm.nih.gov/28742216/) by Joseph and Kramer (2017) and [*Implications of Using a Fetuses-at-Risk Approach When Fetuses Are Not at Risk*](https://onlinelibrary.wiley.com/doi/10.1111/ppe.12254) by Basso (2015).
+This repository includes all code used to estimate stillbirth by gestational age using the fetus-at-risk approach vs. the conventional estimate for stillbirth. If this is your first time using the fetus-at-risk method, please read [*The fetuses-at-risk approach: survival analysis from a fetal perspective*](https://pubmed.ncbi.nlm.nih.gov/28742216/) by Joseph and Kramer (2018) and [*Implications of Using a Fetuses-at-Risk Approach When Fetuses Are Not at Risk*](https://onlinelibrary.wiley.com/doi/10.1111/ppe.12254) by Basso (2016).
  
 Created by Simone Wien and presented at the CityMatCH annual conference, September 2024. 
 
