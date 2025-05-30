@@ -30,7 +30,7 @@ This repository contains the following file structure:
 
 -`tables/`
 
--`README` (you are reading this now)
+-`README`
 
 # Code description
 
