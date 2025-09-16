@@ -1,15 +1,14 @@
-#packages
-pacman::p_load(tidyverse, #general data handling
-               here, #easy file referencing
-               ggplot2, #plots
-               gridExtra, #arrange multiple ggplots
-               cmprsk, #for cuminc package, Gray's CIF estimator 
-               ggsurvfit, #ggcumnic() to plot
-               tidycmprsk, #support ggsurvfit
-               survival) #for cuminc package
+# packages
+pacman::p_load(tidyverse,  # general data handling
+               here,       # easy file referencing
+               ggplot2,    # plots
+               gridExtra,  # arrange multiple ggplots
+               cmprsk,     # for cuminc package, Gray's CIF estimator 
+               ggsurvfit,  # ggcumnic() to plot
+               tidycmprsk, # support ggsurvfit
+               survival)   # for cuminc package
 
-#LOADING DATA
-
+# load data
 here::i_am("code/02_make_prev_plots.R")
 
 data <- readRDS(
@@ -18,22 +17,22 @@ data <- readRDS(
 
 stillbirth <- data
 
-#create preterm birth as a binary variable
+# create preterm birth as a binary variable
 data <- data %>% 
   filter(outcome == "Live Birth") %>% 
   mutate(ptb = ifelse(GESTATION_WEEKS < 37, "Preterm birth", "Term"))
 
-#create B-W dataset
+# create Black-White dataset
+# filter to Black, White individuals
 data_bw <-data %>% 
   filter(exposure == "White" | exposure == "Black")
 
-#CREATE TOTAL PTB DATASET
-
+# create total PTB dataset
 data <- data %>% 
   group_by(ptb, policy) %>%
   summarize(n=n())
 
-#group by policy, get denominator (number of observations per policy)
+# group by policy, get denominator (number of observations per policy)
 data <- data %>%
   group_by(policy) %>%
   mutate(total = sum(n),
@@ -42,18 +41,17 @@ data <- data %>%
          Prevalence = prev,
          Policy = policy)
 
-#filer to PTB
+# filer to PTB
 data <- data %>%
   filter(Outcome =="Preterm birth")
 
-#CREATE B-W PTB DATASET
-
-#group by outcome and policy, get counts of each event 
+# create Black-White PTB dataset
+# group by outcome and policy, get counts of each event 
 data_bw <- data_bw %>% 
   group_by(ptb, policy, exposure) %>%
   summarize(n=n())
 
-#group by policy, get denominator (number of observations per policy)
+# group by policy, get denominator (number of observations per policy)
 data_bw <- data_bw %>%
   group_by(policy, exposure) %>%
   mutate(total = sum(n),
@@ -63,7 +61,7 @@ data_bw <- data_bw %>%
          Policy = policy,
          Race = exposure)
 
-#PLOT TOTAL PTB PREVALENCE 
+# plot of total ptb prevalence
 ptb_prev<- ggplot(data, aes(x=Policy,
                  y=Prevalence,
                  fill = Policy)) + 
@@ -76,17 +74,17 @@ ptb_prev<- ggplot(data, aes(x=Policy,
                 size = 15)) + 
   scale_fill_manual(values = c("Pre-policy" = "#a6bddb" ,
                                "Post-policy" = "#0E315F")) +
-  theme(text=element_text(size=15), #change font size of all text
-        axis.text=element_text(size=15), #change font size of axis text
-        axis.title=element_text(size=15), #change font size of axis titles
-        plot.title=element_text(size=15), #change font size of plot title
-        legend.text=element_text(size=15), #change font size of legend text
-        legend.title=element_text(size=15)) + #change font size of legend title
+  theme(text=element_text(size=15), # change font size of all text
+        axis.text=element_text(size=15), # change font size of axis text
+        axis.title=element_text(size=15), # change font size of axis titles
+        plot.title=element_text(size=15), # change font size of plot title
+        legend.text=element_text(size=15), # change font size of legend text
+        legend.title=element_text(size=15)) + # change font size of legend title
   theme(aspect.ratio = 2/1) + 
-  theme(plot.title = element_text(hjust = 0.5)) + #center title
-  theme(legend.position="none") #remove legend
+  theme(plot.title = element_text(hjust = 0.5)) + # center title
+  theme(legend.position="none") # remove legend
   
-#PLOT PTB PREVALENCE BY RACE
+# plot PTB prevalence by race
 data_bw <- data_bw %>%
   filter(Outcome =="Preterm birth")
 
@@ -103,17 +101,17 @@ ptb_prev_race<- ggplot(data_bw, aes(x=Policy,
        y = "Preterm birth prevalence (%)") +
   scale_fill_manual(values = c("Pre-policy" = "#a6bddb" ,
                                "Post-policy" = "#0E315F")) +
-  theme(text=element_text(size=15), #change font size of all text
-        axis.text=element_text(size=15), #change font size of axis text
-        axis.title=element_text(size=15), #change font size of axis titles
-        plot.title=element_text(size=15), #change font size of plot title
-        legend.text=element_text(size=15), #change font size of legend text
-        legend.title=element_text(size=15)) + #change font size of legend title  
+  theme(text=element_text(size=15), #c hange font size of all text
+        axis.text=element_text(size=15), # change font size of axis text
+        axis.title=element_text(size=15), # change font size of axis titles
+        plot.title=element_text(size=15), # change font size of plot title
+        legend.text=element_text(size=15), # change font size of legend text
+        legend.title=element_text(size=15)) + # change font size of legend title  
   theme(aspect.ratio = 2/1) + 
-  theme(plot.title = element_text(hjust = 0.5)) + #center title
-  theme(legend.position="none") #remove legend
+  theme(plot.title = element_text(hjust = 0.5)) + # center title
+  theme(legend.position="none") # remove legend
  
-#CREATE TOTAL STILLBIRTH DATASET
+# create total stillbirth dataset
 stillbirth_bw <- stillbirth %>%
   filter(exposure == "White" | exposure == "Black")
   
@@ -122,7 +120,7 @@ stillbirth <- stillbirth %>%
   group_by(outcome, policy) %>%
   summarize(n=n())
 
-#group by policy, get denominator (number of observations per policy)
+# group by policy, get denominator (number of observations per policy)
 stillbirth <- stillbirth %>%
   group_by(policy) %>%
   mutate(total = sum(n),
@@ -131,12 +129,12 @@ stillbirth <- stillbirth %>%
          Prevalence = prev,
          Policy = policy)
 
-#CREATE  STILLBIRTH B-W DATASET
+# create stillbirth Black-White dataset
 stillbirth_bw <- stillbirth_bw %>% 
   group_by(outcome, policy, exposure) %>%
   summarize(n=n())
 
-#group by policy, get denominator (number of observations per policy)
+# group by policy, get denominator (number of observations per policy)
 stillbirth_bw <- stillbirth_bw %>%
   group_by(policy, exposure) %>%
   mutate(total = sum(n),
@@ -146,7 +144,7 @@ stillbirth_bw <- stillbirth_bw %>%
          Policy = policy,
          Race = exposure)
 
-#PLOT TOTAL STILLBIRTH PREVALENCE 
+# plot total stillbrith prevalence 
 stillbirth <- stillbirth %>%
   filter(Outcome =="Stillbirth")
 
@@ -162,17 +160,17 @@ stillbirth_prev<- ggplot(stillbirth, aes(x=Policy,
                 size = 15)) + 
   scale_fill_manual(values = c("Pre-policy" = "#dfc27d" ,
                                "Post-policy" = "#a6611a")) +
-  theme(text=element_text(size=15), #change font size of all text
-        axis.text=element_text(size=15), #change font size of axis text
-        axis.title=element_text(size=15), #change font size of axis titles
-        plot.title=element_text(size=15), #change font size of plot title
-        legend.text=element_text(size=15), #change font size of legend text
-        legend.title=element_text(size=15)) + #change font size of legend title
+  theme(text=element_text(size=15),               # change font size of all text
+        axis.text=element_text(size=15),          # change font size of axis text
+        axis.title=element_text(size=15),         # change font size of axis titles
+        plot.title=element_text(size=15),         # change font size of plot title
+        legend.text=element_text(size=15),        # change font size of legend text
+        legend.title=element_text(size=15)) +     # change font size of legend title
   theme(aspect.ratio = 2/1) + 
-  theme(plot.title = element_text(hjust = 0.5)) + #center title
-  theme(legend.position="none") #remove legend
+  theme(plot.title = element_text(hjust = 0.5)) + # center title
+  theme(legend.position="none")                   # remove legend
 
-#PLOT TOTAL STILLBIRTH B-W PREVALENCE 
+# plot total stillbirth Black-White prevalence
 stillbirth_bw <- stillbirth_bw %>%
   filter(Outcome =="Stillbirth")
 
@@ -189,17 +187,17 @@ stillbirth_prev_race<- ggplot(stillbirth_bw, aes(x=Policy,
        y = "Stillbirthprevalence (%)") +
   scale_fill_manual(values = c("Pre-policy" = "#dfc27d" ,
                                "Post-policy" = "#a6611a")) +
-  theme(text=element_text(size=15), #change font size of all text
-        axis.text=element_text(size=15), #change font size of axis text
-        axis.title=element_text(size=15), #change font size of axis titles
-        plot.title=element_text(size=15), #change font size of plot title
-        legend.text=element_text(size=15), #change font size of legend text
-        legend.title=element_text(size=15)) + #change font size of legend title
+  theme(text=element_text(size=15),               # change font size of all text
+        axis.text=element_text(size=15),          # change font size of axis text
+        axis.title=element_text(size=15),         # change font size of axis titles
+        plot.title=element_text(size=15),         # change font size of plot title
+        legend.text=element_text(size=15),        # change font size of legend text
+        legend.title=element_text(size=15)) +     # change font size of legend title
   theme(aspect.ratio = 2/1) + 
-  theme(plot.title = element_text(hjust = 0.5)) + #center title
-  theme(legend.position="none") #remove legend
+  theme(plot.title = element_text(hjust = 0.5)) + # center title
+  theme(legend.position="none")                   # remove legend
 
-#saving plot 1
+# saving plot 1
 ggsave(
   here::here("figures/ptb_prev.png"),
   plot = ptb_prev,
@@ -209,7 +207,7 @@ ggsave(
   height = 6,
 )
 
-#saving plot 2
+# saving plot 2
 ggsave(
   here::here("figures/ptb_prev_race.png"),
   plot = ptb_prev_race,
@@ -219,7 +217,7 @@ ggsave(
   height = 6,
 )
 
-#saving plot 3
+# saving plot 3
 ggsave(
   here::here("figures/stillbirth_prev.png"),
   plot = stillbirth_prev,
@@ -229,7 +227,7 @@ ggsave(
   height = 6,
 )
 
-#saving plot 4
+# saving plot 4
 ggsave(
   here::here("figures/stillbirth_prev_race.png"),
   plot = stillbirth_prev_race,
@@ -239,5 +237,5 @@ ggsave(
   height = 6,
 )
 
-#check to see if script ran 
+# check to see if script ran 
 print("prevalence plot step complete")
